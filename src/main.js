@@ -22,7 +22,13 @@ import permission from './directive/permission'
 import { getDicts } from '@/api/admin/dict/data'
 import { getItems, setItems } from '@/api/table'
 import { getConfigKey } from '@/api/admin/sys-config'
-import { parseTime, resetForm, addDateRange, selectDictLabel, /* download,*/ selectItemsLabel } from '@/utils/costum'
+import {
+  parseTime,
+  resetForm,
+  addDateRange,
+  selectDictLabel,
+  /* download,*/ selectItemsLabel
+} from '@/utils/costum'
 
 import './icons' // icon
 import './permission' // permission control
@@ -41,6 +47,11 @@ Vue.use(VueParticles)
 
 import '@/utils/dialog'
 
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+
+Vue.use(VXETable)
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
 Vue.prototype.getItems = getItems
@@ -57,15 +68,15 @@ Vue.prototype.selectItemsLabel = selectItemsLabel
 Vue.component('Pagination', Pagination)
 Vue.component('BasicLayout', BasicLayout)
 
-Vue.prototype.msgSuccess = function(msg) {
+Vue.prototype.msgSuccess = function (msg) {
   this.$message({ showClose: true, message: msg, type: 'success' })
 }
 
-Vue.prototype.msgError = function(msg) {
+Vue.prototype.msgError = function (msg) {
   this.$message({ showClose: true, message: msg, type: 'error' })
 }
 
-Vue.prototype.msgInfo = function(msg) {
+Vue.prototype.msgInfo = function (msg) {
   this.$message.info(msg)
 }
 
