@@ -4,13 +4,21 @@
     <template #wrapper>
       <el-card class="box-card">
         <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-          <el-form-item label="时段代码" prop="tickCode">
-            <el-input v-model="queryParams.tickCode" placeholder="请输入时段代码" clearable size="small"
-              @keyup.enter.native="handleQuery" />
+          <el-form-item label="时段代码" prop="tickCode"><el-input
+            v-model="queryParams.tickCode"
+            placeholder="请输入时段代码"
+            clearable
+            size="small"
+            @keyup.enter.native="handleQuery"
+          />
           </el-form-item>
-          <el-form-item label="时段名称" prop="tickName">
-            <el-input v-model="queryParams.tickName" placeholder="请输入时段名称" clearable size="small"
-              @keyup.enter.native="handleQuery" />
+          <el-form-item label="时段名称" prop="tickName"><el-input
+            v-model="queryParams.tickName"
+            placeholder="请输入时段名称"
+            clearable
+            size="small"
+            @keyup.enter.native="handleQuery"
+          />
           </el-form-item>
 
           <el-form-item>
@@ -21,72 +29,161 @@
 
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button v-permisaction="['energy:energyDimTick:add']" type="primary" icon="el-icon-plus" size="mini"
-              @click="handleAdd">新增
+            <el-button
+              v-permisaction="['energy:energyDimTick:add']"
+              type="primary"
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+            >新增
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button v-permisaction="['energy:energyDimTick:edit']" type="success" icon="el-icon-edit" size="mini"
-              :disabled="single" @click="handleUpdate">修改
+            <el-button
+              v-permisaction="['energy:energyDimTick:edit']"
+              type="success"
+              icon="el-icon-edit"
+              size="mini"
+              :disabled="single"
+              @click="handleUpdate"
+            >修改
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button v-permisaction="['energy:energyDimTick:remove']" type="danger" icon="el-icon-delete" size="mini"
-              :disabled="multiple" @click="handleDelete">删除
+            <el-button
+              v-permisaction="['energy:energyDimTick:remove']"
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              :disabled="multiple"
+              @click="handleDelete"
+            >删除
             </el-button>
           </el-col>
           <el-col :span="1.5">
-            <excel-export ref="excelExport" :book-type="bookType" :filename="filename" :sheet="sheet"
-              :on-error="onError" :manual="true" />
-            <el-button v-permisaction="['energy:energyDimTick:list']" type="success" icon="el-icon-download" size="mini"
-              @click="handleExport">导出查询
+            <excel-export
+              ref="excelExport"
+              :book-type="bookType"
+              :filename="filename"
+              :sheet="sheet"
+              :on-error="onError"
+              :manual="true"
+            />
+            <el-button
+              v-permisaction="['energy:energyDimTick:list']"
+              type="success"
+              icon="el-icon-download"
+              size="mini"
+              @click="handleExport"
+            >导出
             </el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-upload v-permisaction="['energy:energyDimTick:list']" :before-upload="handleImport" action="default">
+              <el-button size="mini" type="primary" icon="el-icon-upload">导入</el-button>
+            </el-upload>
           </el-col>
         </el-row>
 
-        <vxe-table border ref="xTable1" v-loading="loading" :data="energyDimTickList"
-          @checkbox-change="handleSelectionChange">
-          <vxe-column type="checkbox" width="55" align="center" />
-          <vxe-column title="时段代码" align="center" field="tickCode" :show-overflow-tooltip="true" />
-          <vxe-column title="时段名称" align="center" field="tickName" :show-overflow-tooltip="true" />
-          <vxe-column title="时段开始时间" align="center" field="tickStart" :show-overflow-tooltip="true" />
-          <vxe-column title="时段结束时间" align="center" field="tickEnd" :show-overflow-tooltip="true" />
+        <vxe-table
+          ref="xTable1"
+          v-loading="loading"
+          border
+          :data="energyDimTickList"
+          @checkbox-change="handleSelectionChange"
+        >
+          <vxe-column type="checkbox" width="55" align="center" /><vxe-column
+            title="时段代码"
+            align="center"
+            field="tickCode"
+            :show-overflow-tooltip="true"
+          /><vxe-column
+            title="时段名称"
+            align="center"
+            field="tickName"
+            :show-overflow-tooltip="true"
+          /><vxe-column
+            title="时段开始时间"
+            align="center"
+            field="tickStart"
+            :show-overflow-tooltip="true"
+          /><vxe-column
+            title="时段结束时间"
+            align="center"
+            field="tickEnd"
+            :show-overflow-tooltip="true"
+          />
           <vxe-column title="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-popconfirm class="delete-popconfirm" title="确认要修改吗?" confirm-button-text="修改"
-                @onConfirm="handleUpdate(scope.row)">
-                <el-button slot="reference" v-permisaction="['energy:energyDimTick:edit']" size="mini" type="text"
-                  icon="el-icon-edit">修改
+              <el-popconfirm
+                class="delete-popconfirm"
+                title="确认要修改吗?"
+                confirm-button-text="修改"
+                @onConfirm="handleUpdate(scope.row)"
+              >
+                <el-button
+                  slot="reference"
+                  v-permisaction="['energy:energyDimTick:edit']"
+                  size="mini"
+                  type="text"
+                  icon="el-icon-edit"
+                >修改
                 </el-button>
               </el-popconfirm>
-              <el-popconfirm class="delete-popconfirm" title="确认要删除吗?" confirm-button-text="删除"
-                @onConfirm="handleDelete(scope.row)">
-                <el-button slot="reference" v-permisaction="['energy:energyDimTick:remove']" size="mini" type="text"
-                  icon="el-icon-delete">删除
+              <el-popconfirm
+                class="delete-popconfirm"
+                title="确认要删除吗?"
+                confirm-button-text="删除"
+                @onConfirm="handleDelete(scope.row)"
+              >
+                <el-button
+                  slot="reference"
+                  v-permisaction="['energy:energyDimTick:remove']"
+                  size="mini"
+                  type="text"
+                  icon="el-icon-delete"
+                >删除
                 </el-button>
               </el-popconfirm>
             </template>
           </vxe-column>
         </vxe-table>
 
-        <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageIndex"
-          :limit.sync="queryParams.pageSize" @pagination="getList" />
+        <pagination
+          v-show="total>0"
+          :total="total"
+          :page.sync="queryParams.pageIndex"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
 
         <!-- 添加或修改对话框 -->
         <el-dialog :title="title" :visible.sync="open" width="500px">
           <el-form ref="form" :model="form" :rules="rules" label-width="80px">
 
-            <el-form-item label="时段代码" prop="tickCode">
-              <el-input v-model="form.tickCode" placeholder="时段代码" />
+            <el-form-item label="时段代码" field="tickCode">
+              <el-input
+                v-model="form.tickCode"
+                placeholder="时段代码"
+              />
             </el-form-item>
-            <el-form-item label="时段名称" prop="tickName">
-              <el-input v-model="form.tickName" placeholder="时段名称" />
+            <el-form-item label="时段名称" field="tickName">
+              <el-input
+                v-model="form.tickName"
+                placeholder="时段名称"
+              />
             </el-form-item>
-            <el-form-item label="时段开始时间" prop="tickStart">
-              <el-input v-model="form.tickStart" placeholder="时段开始时间" />
+            <el-form-item label="时段开始时间" field="tickStart">
+              <el-input
+                v-model="form.tickStart"
+                placeholder="时段开始时间"
+              />
             </el-form-item>
-            <el-form-item label="时段结束时间" prop="tickEnd">
-              <el-input v-model="form.tickEnd" placeholder="时段结束时间" />
+            <el-form-item label="时段结束时间" field="tickEnd">
+              <el-input
+                v-model="form.tickEnd"
+                placeholder="时段结束时间"
+              />
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -100,7 +197,14 @@
 </template>
 
 <script>
-import { addEnergyDimTick, delEnergyDimTick, getEnergyDimTick, listEnergyDimTick, updateEnergyDimTick, exportEnergyDimTick } from '@/api/energy/energy-dim-tick'
+import {
+  addEnergyDimTick,
+  delEnergyDimTick,
+  getEnergyDimTick,
+  listEnergyDimTick,
+  updateEnergyDimTick,
+  exportEnergyDimTick, importEnergyDimTick
+} from '@/api/energy/energy-dim-tick'
 
 export default {
   name: 'EnergyDimTick',
@@ -135,14 +239,14 @@ export default {
         pageSize: 10,
         tickCode: undefined,
         tickName: undefined
+
       },
       // 表单参数
       form: {
       },
       // 表单校验
-      rules: {
-        tickCode: [{ required: true, message: '时段代码不能为空', trigger: 'blur' }],
-        tickName: [{ required: true, message: '时段名称不能为空', trigger: 'blur' }],
+      rules: { tickCode: [{ required: true, message: '时段代码不能为空', trigger: 'blur' }],
+        tickName: [{ required: true, message: '时段名称不能为空', trigger: 'blur' }]
       }
     }
   },
@@ -173,14 +277,14 @@ export default {
         tickCode: undefined,
         tickName: undefined,
         tickStart: undefined,
-        tickEnd: undefined,
+        tickEnd: undefined
       }
       this.resetForm('form')
     },
-    getImgList: function () {
+    getImgList: function() {
       this.form[this.fileIndex] = this.$refs['fileChoose'].resultList[0].fullUrl
     },
-    fileClose: function () {
+    fileClose: function() {
       this.fileOpen = false
     },
     // 关系
@@ -213,7 +317,7 @@ export default {
     handleUpdate(row) {
       this.reset()
       const id =
-        row.id || this.ids
+                row.id || this.ids
       getEnergyDimTick(id).then(response => {
         this.form = response.data
         this.open = true
@@ -222,7 +326,7 @@ export default {
       })
     },
     /** 提交按钮 */
-    submitForm: function () {
+    submitForm: function() {
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.id !== undefined) {
@@ -257,7 +361,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function () {
+      }).then(function() {
         return delEnergyDimTick({ 'ids': Ids })
       }).then((response) => {
         if (response.code === 200) {
@@ -267,7 +371,7 @@ export default {
         } else {
           this.msgError(response.msg)
         }
-      }).catch(function () {
+      }).catch(function() {
       })
     },
     // 导出
@@ -279,7 +383,7 @@ export default {
         .then(res => {
           const blob = new Blob([res.data], {
             // type: res.headers['content-type']
-            type: `application/vnd.ms-excel;charset=UTF-8` // word文档为msword,pdf文档为pdf
+            type: `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8` // word文档为msword,pdf文档为pdf
           }
           )
           const downloadElement = document.createElement('a')
@@ -303,6 +407,19 @@ export default {
           // console.log(res)
           // this.$log.push('err', err)
         })
+    },
+    // 导入
+    handleImport(file) {
+      const fd = new FormData()
+      fd.append('file', file) // 传文件
+      importEnergyDimTick(fd).then(response => {
+        if (response.code === 200) {
+          this.msgSuccess(response.msg)
+          this.getList()
+        } else {
+          this.msgError(response)
+        }
+      })
     }
   }
 }
